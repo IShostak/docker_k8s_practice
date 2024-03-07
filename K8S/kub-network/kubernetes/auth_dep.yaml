@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: ihorshostak/auth
+          imagePullPolicy: Always
+#        - name: users
+#          image: ihorshostak/auth
+#          imagePullPolicy: Always
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: 8080
+#            periodSeconds: 10
+#            initialDelaySeconds: 5
+        # - name: ...
+        #   image: ...

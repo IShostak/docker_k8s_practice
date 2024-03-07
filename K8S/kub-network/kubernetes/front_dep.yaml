@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: front
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      containers:
+        - name: auth
+          image: ihorshostak/front
+          env:
+            - name: AUTH_ADDRESS
+              value: "auth-service.default"
+          imagePullPolicy: Always

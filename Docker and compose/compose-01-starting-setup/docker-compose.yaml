@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  db:
+    image: 'mongo'
+    volumes:
+      - data:/data/db
+    #environment:
+      #MONGODB_USER: user
+      #MONGODB_PASSWORD: secret
+      # - MONGODB_USER= user
+    env_file:
+      - env/mongo.env
+    container_name: db
+
+  backend:
+    #build: ./backend
+    build:
+      context: backend      #path - needs a higher level folder(to access everything for dockerfile)
+      dockerfile: backend/Dockerfile  #dockerfile name
+     # args:
+     #   someargs: arg
+
+    ports:
+      - '80:80'
+
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - env/backend.env
+    depends_on:
+      - db
+
+  frontend:
+    build: frontend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend/src:/app/src
+    stdin_open: true #to make interactive
+    tty: true        #to make interactive
+    depends_on:
+     - backend
+
+
+#for named volumes but not bound
+volumes:
+  data:
+  logs:
+
+
+

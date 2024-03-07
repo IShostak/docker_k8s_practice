@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: story-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: story
+  template:
+    metadata:
+      labels:
+        app: story
+    spec:
+      containers:
+        - name: story
+          image: ihorshostak/test
+          env:
+            - name: STORY_FOLDER
+              valueFrom:
+                configMapKeyRef: story-env-data
+                key: folder
+          volumeMounts:
+            - mountPath: /app/story
+              name: story-vol
+      volumes:
+        - name: story-vol
+          persistentVolumeClaim:
+            claimName: story-vol-claim

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task
+  template:
+    metadata:
+      labels:
+        app: task
+    spec:
+      containers:
+        - name: auth
+          image: ihorshostak/task
+          env:
+            - name: AUTH_ADDRESS
+              value: "auth-service.default"
+            - name: TASKS_FOLDER
+              value: "tasks"
+          imagePullPolicy: Always
